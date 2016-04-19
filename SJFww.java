@@ -1,50 +1,51 @@
 import java.util.*;
 
 public class SJFww {
-	private int _czas;
-	private ArrayDeque<Proces> _listaProcesow;
-	private Kolejka _kolej = new Kolejka();
-	private ArrayList<Proces> _wykonane = new ArrayList<Proces>();
+	private int _czasSJFww = 0;
+	private ArrayDeque<Proces> _listaProcesowSJFww  = new ArrayDeque<Proces>();
+	private Kolejka _kolejSJFww = new Kolejka();
+	private ArrayList<Proces> _wykonaneSJFww = new ArrayList<Proces>();
 	
-	public SJFww(ArrayDeque<Proces> lista)
+	public SJFww(ArrayDeque<Proces> lista3)
 	{
-		_listaProcesow = lista;
+		_listaProcesowSJFww.clear();
+		_listaProcesowSJFww = lista3;
 	}
 	
 	public void wykonajSJFww()
 	{
-		_kolej.dodaj(_listaProcesow.remove());
+		_kolejSJFww.dodaj(_listaProcesowSJFww.remove());
 		int nr = 0;
 		int oczekiwanie = 0;
-		while (!_listaProcesow.isEmpty() || nr < _kolej.rozmiar())
+		while (!_listaProcesowSJFww.isEmpty() || !_kolejSJFww.czyPusta())
 		{
-			_czas++;
+			_czasSJFww++;
 			
-			if (!_listaProcesow.isEmpty() && _czas == _listaProcesow.peek().getZgloszenie())
+			if (!_listaProcesowSJFww.isEmpty() && _czasSJFww == _listaProcesowSJFww.peek().getZgloszenie())
 			{
-				_kolej.dodaj(_listaProcesow.remove());
-				_kolej.sortuj();
+				_kolejSJFww.dodaj(_listaProcesowSJFww.remove());
+				_kolejSJFww.sortuj();
 			}
-			if (nr < _kolej.rozmiar() && _kolej.getProces(0) != null)
+			if (!_kolejSJFww.czyPusta())
 			{
-				_kolej.getProces(0).zwiekszWykonano(1);
+				_kolejSJFww.getProces(0).zwiekszWykonano(1);
 			}
-			if (nr < _kolej.rozmiar() && _kolej.getProces(0).isDone())
+			if (!_kolejSJFww.czyPusta() && _kolejSJFww.getProces(0).isDone())
 			{
-				_wykonane.add(_kolej.getProces(nr));
-				_kolej.usun(0);
+				_wykonaneSJFww.add(_kolejSJFww.getProces(0));
+				_kolejSJFww.usun(0);
 				nr++;
 			}
-			for (int i = 0; i < _kolej.rozmiar(); i++)
+			for (int i = 1; i < _kolejSJFww.rozmiar(); i++)
 			{
-				_kolej.getProces(i).zwiekszOczekiwania(1);
+				_kolejSJFww.getProces(i).zwiekszOczekiwania(1);
 			}
 		}
-		for (int i = 0; i < _wykonane.size(); i++)
+		for (int i = 0; i < _wykonaneSJFww.size(); i++)
 		{
-			oczekiwanie += _wykonane.get(i).getCzasOczekiwania();
+			oczekiwanie += _wykonaneSJFww.get(i).getCzasOczekiwania();
 		}
 		System.out.println("[SJF wyw³aszczaj¹cy] Œredni czas oczekiwania " + (oczekiwanie/(nr+1)) + " s");
-		System.out.println("[SJF wyw³aszczaj¹cy] Œredni czas wykonywania procesu " + (_czas/(nr+1)) + " s");
+		System.out.println("[SJF wyw³aszczaj¹cy] Œredni czas wykonywania procesu " + (_czasSJFww/(nr+1)) + " s");
 	}
 }

@@ -1,8 +1,14 @@
 import java.util.*;
+
 public class Kolejka {
 	ArrayList<Proces> _kolejka = new ArrayList<Proces>();
 	ProcesComparator com = new ProcesComparator();
 	int _elementow = 0;
+	
+	public Kolejka()
+	{
+		
+	}
 	
 	public void dodaj(Proces pro)
 	{
@@ -61,7 +67,7 @@ public class Kolejka {
 	{
 		for (int i = 0; i < _kolejka.size(); i++)
 		{
-			System.out.println("Numer procesu: " + _kolejka.get(i).getNr() + " Moment przybycia: " + _kolejka.get(i).getZgloszenie() + " Czas wykonania" + _kolejka.get(i).getTime());
+			System.out.println(_kolejka.get(i));
 		}
 	}
 }
