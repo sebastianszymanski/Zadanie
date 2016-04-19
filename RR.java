@@ -1,54 +1,58 @@
 import java.util.*;
 
 public class RR {
-	private int _czas = 0;
-	private ArrayDeque<Proces> _listaProcesow;
-	private Kolejka _kolej = new Kolejka();
-	private ArrayList<Proces> _wykonane = new ArrayList<Proces>();
+	private int _czasRR = 0;
+	private ArrayDeque<Proces> _listaProcesowRR  = new ArrayDeque<Proces>();
+	private Kolejka _kolejRR = new Kolejka();
+	private ArrayList<Proces> _wykonaneRR = new ArrayList<Proces>();
 	private int _kwant;
 	
-	public RR(ArrayDeque<Proces> lista, int kwant)
+	public RR(ArrayDeque<Proces> lista4, int kwant)
 	{
-		_listaProcesow = lista;
+		_listaProcesowRR.clear();
+		_listaProcesowRR = lista4;
 		_kwant = kwant;
 	}
 	
 	public void wykonajRR()
 	{
-		_kolej.dodaj(_listaProcesow.remove());
+		_kolejRR.dodaj(_listaProcesowRR.remove());
 		int nr = 0;
 		int oczekiwanie = 0;
-		while (!_listaProcesow.isEmpty() || nr < _kolej.rozmiar())
+		int licznik = 0;
+		while (!_listaProcesowRR.isEmpty() || !_kolejRR.czyPusta())
 		{
-			_czas++;
-			
-			if (!_listaProcesow.isEmpty() && _czas == _listaProcesow.peek().getZgloszenie())
-				_kolej.dodaj(_listaProcesow.remove());
-			if (nr < _kolej.rozmiar() && _kolej.getProces(0) != null)
+			_czasRR++;
+			licznik++;
+			if (!_listaProcesowRR.isEmpty() && _czasRR == _listaProcesowRR.peek().getZgloszenie())
+				_kolejRR.dodaj(_listaProcesowRR.remove());
+			if (!_kolejRR.czyPusta())
 			{
-				_kolej.getProces(0).zwiekszWykonano(1);
+				_kolejRR.getProces(0).zwiekszWykonano(1);
 			}
 			
-			if (nr < _kolej.rozmiar() && _kolej.getProces(0).isDone())
+			if (!_kolejRR.czyPusta() && _kolejRR.getProces(0).isDone())
 			{
-				_wykonane.add(_kolej.getProces(0));
-				_kolej.usun(0);
+				_wykonaneRR.add(_kolejRR.getProces(0));
+				_kolejRR.usun(0);
 				nr++;
-			}
-			else if (nr < _kolej.rozmiar() && _czas%_kwant == 0)
+				licznik = 0;
+			} else if (!_kolejRR.czyPusta() && licznik == _kwant)
 			{
-				_kolej.dodaj(_kolej.usun(0));
+				_kolejRR.dodaj(_kolejRR.usun(0));
+				licznik = 0;
 			}
-			for (int i = 0; i < _kolej.rozmiar(); i++)
+			for (int i = 1; i < _kolejRR.rozmiar(); i++)
 			{
-				_kolej.getProces(i).zwiekszOczekiwania(1);
+				_kolejRR.getProces(i).zwiekszOczekiwania(1);
 			}
 		}
-		for (int i = 0; i < _wykonane.size(); i++)
+		for (int i = 0; i < _wykonaneRR.size(); i++)
 		{
-			oczekiwanie += _wykonane.get(i).getCzasOczekiwania();
+			oczekiwanie += _wykonaneRR.get(i).getCzasOczekiwania();
 		}
 		System.out.println("[RR] Œredni czas oczekiwania " + (oczekiwanie/(nr+1)) + " s");
-		System.out.println("[RR] Œredni czas wykonywania procesu " + (_czas/(nr+1)) + " s");
+		System.out.println("[RR] Œredni czas wykonywania procesu " + (_czasRR/(nr+1)) + " s");
+
 	}
 }

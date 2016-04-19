@@ -22,7 +22,7 @@ public class Proces {
 	
 	public String toString()
 	{
-		return (_nr + ": " + _czasWykonania);
+		return ("Numer procesu " + _nr + " czas oczekiwania " + _czasOczekiwania + " czas wykonania " + _czasWykonania + " wykonano " + _wykonano);
 	}
 	
 	public void setTime(int czas)
