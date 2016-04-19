@@ -6,9 +6,10 @@ public class Wykonaj {
 	{
 		Random gen = new Random();
 		int tw = 0;
+		int tem = 0;
 		for (int i = 1; i <= ilosc; i++)
 		{
-			int tem = gen.nextInt(maxCzasWykonania) + 1;
+			tem = gen.nextInt(maxCzasWykonania) + 1;
 			lista.add(new Proces(i, tem, tw));
 			lista2.add(new Proces(i, tem, tw));
 			lista3.add(new Proces(i, tem, tw));
